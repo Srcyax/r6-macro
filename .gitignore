@@ -6,6 +6,12 @@
 *.lo
 *.o
 *.obj
+*.db
+*.ipch
+*.vsidx
+*.bin
+*.suo
+*.lock
 
 # Precompiled Headers
 *.gch
