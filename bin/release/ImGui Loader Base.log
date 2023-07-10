@@ -1,0 +1,11 @@
+﻿D:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(516,5): warning MSB8004: o diretório Intermediate não termina com uma barra à direita. Essa instância de compilação adicionará a barra conforme necessário para permitir a avaliação adequada do Diretório Intermediate.
+D:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(517,5): warning MSB8004: o diretório Output não termina com uma barra à direita. Essa instância de compilação adicionará a barra conforme necessário para permitir a avaliação adequada do Diretório Output.
+  Verificando fontes para dependências de módulo...
+  mouse.cpp
+C:\Users\lui\Documents\GitHub\macro\functions\mouse.cpp(8,8): warning C4244: 'argumento': conversão de 'float' para 'DWORD', possível perda de dados
+  Gerando código
+  0 of 3647 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
+  Finalizada a geração de código
+  ImGui Loader Base.vcxproj -> C:\Users\lui\Documents\GitHub\macro\built\release\macro.exe

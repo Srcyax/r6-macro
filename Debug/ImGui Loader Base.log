@@ -1,4 +1,0 @@
-﻿  Verificando fontes para dependências de módulo...
-  main.cpp
-MSVCRTD.lib(exe_main.obj) : error LNK2019: símbolo externo não resolvido, _main, referenciado na função "int __cdecl invoke_main(void)" (?invoke_main@@YAHXZ)
-C:\Users\lui\Desktop\ImGui-External-Base-main\Debug\Base.exe : fatal error LNK1120: 1 externo não resolvidos

@@ -4,7 +4,7 @@
 
 void mouse::Move(float x, float y, float s)
 {
-	mouse_event(0x0001, x, y, 0, 0);
+	mouse_event(0x0001, (DWORD)x, (DWORD)y, 0, 0);
 	Sleep(s);
 }
 
