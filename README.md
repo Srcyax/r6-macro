@@ -1,7 +1,6 @@
-# ImGui-External-Base
+# R6 Macro
 
-Based on - "https://github.com/noteffex/ImGui-Loader-Base"
 
-I added a clean ish menu style, a custom font, icons, and some basic functions. (move mouse, mouse click, and key presses)
+I made a macro for R6 for my personal use.
 
-Screen shot of menu - "https://prnt.sc/vW87E1EPmy7Z"
+I'm making the source available so you can make your own modifications

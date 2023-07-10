@@ -12,6 +12,9 @@
 *.bin
 *.suo
 *.lock
+*.db-shm
+*.db-wal
+*.opendb
 
 # Precompiled Headers
 *.gch
