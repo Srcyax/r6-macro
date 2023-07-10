@@ -10,13 +10,7 @@ public:
 	bool active = true;
 
 	int tab = 0;
-	int subTab = 0;
-	char configName[20];
-	std::string configDirectory = "C:\\Configs\\";
-
-	bool isValidIndex(int index) {
-		return index != -1;
-	}
+	int subTab = 0;		
 };
 
 class color_settings

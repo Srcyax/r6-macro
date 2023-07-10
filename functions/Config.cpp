@@ -6,18 +6,18 @@ void config::Create() {
     data["y"] = 0.f;
     data["time"] = 0.f;
 
-    std::fstream file(globals.configDirectory + globals.configName + ".json", std::ios::out);
+    std::fstream file(config::directory + config::name + ".json", std::ios::out);
 
     file << data.dump();
     file.close();
 }
 
 void config::Remove(const char* name) {
-    std::remove((globals.configDirectory + name).c_str());
+    std::remove((config::directory + name).c_str());
 }
 
 void config::Load(std::string name) {
-    std::ifstream file(globals.configDirectory + name, std::ios::out);
+    std::ifstream file(config::directory + name, std::ios::out);
     json data;
     file >> data;
     file.close();
@@ -33,7 +33,7 @@ void config::Save(std::string name) {
     data["y"] = mouse::y;
     data["time"] = mouse::time;
 
-    std::ofstream file(globals.configDirectory + name, std::ios::out);
+    std::ofstream file(config::directory + name, std::ios::out);
     file << data.dump();
     file.close();
 }

@@ -1,5 +1,4 @@
 #include "../Header Files/menu.hh" 
-using namespace ImGui;
 #include "../Header Files/globals.hh"
 #include "../imgui/imgui_internal.h"
 #include "../imgui/imgui.h"
@@ -22,8 +21,46 @@ std::vector<std::string> getExistingConfigs(const std::string& directory) {
     return configs;
 }
 
-void Macro() {
-    SetCursorPos(ImVec2(10, 10));
+void ui::renderMenu() {
+    if (!globals.active) 
+        return;
+
+    ImGui::SetNextWindowPos(ImVec2(window_pos.x, window_pos.y), ImGuiCond_Once);
+    ImGui::SetNextWindowSize(ImVec2(window_size.x, window_size.y));
+    ImGui::SetNextWindowBgAlpha(1.0f);
+
+    ImGui::Begin((window_title + currentConfig).c_str(), &globals.active, window_flags);
+    {
+        ImGui::BeginChild("##buttons" , ImVec2(100, 230));
+        {
+            ImGui::SetCursorPosX(20);
+            ImGui::SetCursorPosY(35);
+            if (ImGui::Button(" \n\n " ICON_FA_LIST " \n ##1", ImVec2(60, 60))) globals.tab = 0;
+            ImGui::SetCursorPosX(20);
+            if (ImGui::Button(" \n\n  " ICON_FA_ADDRESS_CARD " \n ##2", ImVec2(60, 60))) globals.tab = 1;
+        }
+        ImGui::EndChild();
+        ImGui::SameLine();
+        ImGui::SetCursorPosX(110);
+        ImGui::BeginChild("##tabs", ImVec2(380, 230));
+        {
+            switch (globals.tab)
+            {
+            case 0:
+                ui::Macro();
+                break;
+            case 1:
+                ui::Config();
+                break;
+            }
+        }
+        ImGui::EndChild();
+    }
+    ImGui::End();
+}
+
+void ui::Macro() {
+    ImGui::SetCursorPos(ImVec2(10, 10));
     ImGui::BeginChild("##child1", ImVec2(175, 190), false, ImGuiWindowFlags_NoScrollbar);
     {
         ImGui::SliderFloat("x", &mouse::x, -10, 10);
@@ -31,7 +68,7 @@ void Macro() {
         ImGui::SliderFloat("time", &mouse::time, 0, 10);
     }
     ImGui::EndChild();
-    SameLine();
+    ImGui::SameLine();
     ImGui::BeginChild("##child2", ImVec2(175, 190), false, ImGuiWindowFlags_NoScrollbar);
     {
         ImGui::Text("empty...");
@@ -39,11 +76,11 @@ void Macro() {
     ImGui::EndChild();
 }
 
-void Config() {
-    SetCursorPos(ImVec2(10, 10));
+void ui::Config() {
+    ImGui::SetCursorPos(ImVec2(10, 10));
     ImGui::BeginChild("##child1", ImVec2(360, 200), false, ImGuiWindowFlags_NoScrollbar);
     {
-        InputText("##configName", globals.configName, 20);
+        ImGui::InputText("##configName", config::name, 20);
         std::vector<std::string> configs = getExistingConfigs("C:\\Configs");
 
         static int selectedIndex = -1;
@@ -56,70 +93,25 @@ void Config() {
 
         ImVec2 buttonSize(52, 30);
 
-        if (Button("save", buttonSize) && globals.isValidIndex(selectedIndex)) {
+        if (ImGui::Button("save", buttonSize) && config::isValidIndex(selectedIndex)) {
             config::Save(configNames[selectedIndex]);
         }
-
-        SameLine();
-
-        if (Button("load", buttonSize) && globals.isValidIndex(selectedIndex)) {
+        ImGui::SameLine();
+        if (ImGui::Button("load", buttonSize) && config::isValidIndex(selectedIndex)) {
             config::Load(configNames[selectedIndex]);
             currentConfig = configNames[selectedIndex];
         }
-
-        SameLine();
-
-        std::size_t configNameLengh = std::strlen(globals.configName);
-        if (Button("create", buttonSize) && configNameLengh > 0) {
+        ImGui::SameLine();
+        std::size_t configNameLengh = std::strlen(config::name);
+        if (ImGui::Button("create", buttonSize) && configNameLengh > 0) {
             config::Create();
         }
-
-        SameLine();
-
-        if (Button("remove", buttonSize) && globals.isValidIndex(selectedIndex)) {
+        ImGui::SameLine();
+        if (ImGui::Button("remove", buttonSize) && config::isValidIndex(selectedIndex)) {
             config::Remove(configNames[selectedIndex]);
         }
     }
-    ImGui::EndChild();  
-}
-
-
-void ui::renderMenu() {
-    if (!globals.active) 
-        return;
-
-    ImGui::SetNextWindowPos(ImVec2(window_pos.x, window_pos.y), ImGuiCond_Once);
-    ImGui::SetNextWindowSize(ImVec2(window_size.x, window_size.y));
-    ImGui::SetNextWindowBgAlpha(1.0f);
-
-    ImGui::Begin((window_title + currentConfig).c_str(), &globals.active, window_flags);
-    {
-        BeginChild("##buttons" , ImVec2(100, 230));
-        {
-            SetCursorPosX(20);
-            SetCursorPosY(35);
-            if (Button(" \n\n " ICON_FA_LIST " \n ##1", ImVec2(60, 60))) globals.tab = 0;
-            SetCursorPosX(20);
-            if (Button(" \n\n  " ICON_FA_ADDRESS_CARD " \n ##2", ImVec2(60, 60))) globals.tab = 1;
-        }
-        EndChild();
-        SameLine();
-        SetCursorPosX(110); 
-        BeginChild("##tabs", ImVec2(380, 230));
-        {
-            switch (globals.tab)
-            {
-            case 0:
-                Macro();
-                break;
-            case 1:
-                Config();
-                break;
-            }
-        }
-        EndChild();
-    }
-    ImGui::End();
+    ImGui::EndChild();
 }
 
 void ui::init(LPDIRECT3DDEVICE9 device) {
