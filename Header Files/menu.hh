@@ -18,6 +18,6 @@ namespace ui {
 	
 	inline ImVec2 screen_res{ 000, 000 };
 	inline ImVec2 window_pos{ 0, 0 };
-	inline ImVec2 window_size{ 500, 250 };
+	inline ImVec2 window_size{ 500, 270 };
 	inline DWORD  window_flags = ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar;
 }

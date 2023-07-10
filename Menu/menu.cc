@@ -24,7 +24,7 @@ std::vector<std::string> getExistingConfigs(const std::string& directory) {
 
 void Macro() {
     SetCursorPos(ImVec2(10, 10));
-    ImGui::BeginChild("##child1", ImVec2(175, 190), true, ImGuiWindowFlags_NoScrollbar);
+    ImGui::BeginChild("##child1", ImVec2(175, 190), false, ImGuiWindowFlags_NoScrollbar);
     {
         ImGui::SliderFloat("x", &mouse::x, -10, 10);
         ImGui::SliderFloat("y", &mouse::y, -10, 10);
@@ -32,7 +32,7 @@ void Macro() {
     }
     ImGui::EndChild();
     SameLine();
-    ImGui::BeginChild("##child2", ImVec2(175, 190), true, ImGuiWindowFlags_NoScrollbar);
+    ImGui::BeginChild("##child2", ImVec2(175, 190), false, ImGuiWindowFlags_NoScrollbar);
     {
         ImGui::Text("empty...");
     }
@@ -41,7 +41,7 @@ void Macro() {
 
 void Config() {
     SetCursorPos(ImVec2(10, 10));
-    ImGui::BeginChild("##child1", ImVec2(360, 190), true, ImGuiWindowFlags_NoScrollbar);
+    ImGui::BeginChild("##child1", ImVec2(360, 200), false, ImGuiWindowFlags_NoScrollbar);
     {
         InputText("##configName", globals.configName, 20);
         std::vector<std::string> configs = getExistingConfigs("C:\\Configs");
@@ -94,7 +94,7 @@ void ui::renderMenu() {
 
     ImGui::Begin((window_title + currentConfig).c_str(), &globals.active, window_flags);
     {
-        BeginChild("##buttons" , ImVec2(100, 210));
+        BeginChild("##buttons" , ImVec2(100, 230));
         {
             SetCursorPosX(20);
             SetCursorPosY(35);
@@ -105,7 +105,7 @@ void ui::renderMenu() {
         EndChild();
         SameLine();
         SetCursorPosX(110); 
-        BeginChild("##tabs", ImVec2(380, 210));
+        BeginChild("##tabs", ImVec2(380, 230));
         {
             switch (globals.tab)
             {
@@ -141,7 +141,7 @@ void ui::RunStyle()
 
     style.Colors[ImGuiCol_TitleBgActive] = ImColor(0, 0, 0, 155);
     style.Colors[ImGuiCol_WindowBg] = ImColor(color.all[0], color.all[1], color.all[2], color.all[3]);
-    style.Colors[ImGuiCol_ChildBg] = ImColor(5, 5, 5, 255);
+    style.Colors[ImGuiCol_ChildBg] = ImColor(15, 15, 15, 255);
     style.Colors[ImGuiCol_Button] = ImColor(color.all[0], color.all[1], color.all[2], color.all[3]);
     style.Colors[ImGuiCol_ButtonActive] = ImColor(0, 0, 0, 255);
     style.Colors[ImGuiCol_ButtonHovered] = ImColor(color.all[0], color.all[1], color.all[2], color.all[3]);
