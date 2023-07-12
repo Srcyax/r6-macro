@@ -27,6 +27,7 @@ namespace mouse
 	void Move(float x,float y, float s);
 	void click(int holdTime);
 
+	inline bool active = true;
 	inline float x;
 	inline float y;
 	inline float time;

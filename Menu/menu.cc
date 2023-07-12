@@ -29,9 +29,9 @@ void ui::renderMenu() {
     ImGui::SetNextWindowSize(ImVec2(window_size.x, window_size.y));
     ImGui::SetNextWindowBgAlpha(1.0f);
 
-    ImGui::Begin((window_title + currentConfig).c_str(), &globals.active, window_flags);
+    ImGui::Begin(window_title, &globals.active, window_flags);
     {
-        ImGui::BeginChild("##buttons" , ImVec2(100, 230));
+        ImGui::BeginChild("##buttons" , ImVec2(100, 235));
         {
             ImGui::SetCursorPosX(20);
             ImGui::SetCursorPosY(35);
@@ -42,7 +42,7 @@ void ui::renderMenu() {
         ImGui::EndChild();
         ImGui::SameLine();
         ImGui::SetCursorPosX(110);
-        ImGui::BeginChild("##tabs", ImVec2(380, 230));
+        ImGui::BeginChild("##tabs", ImVec2(380, 235));
         {
             switch (globals.tab)
             {
@@ -53,8 +53,10 @@ void ui::renderMenu() {
                 ui::Config();
                 break;
             }
+            
         }
         ImGui::EndChild();
+        ImGui::Text(currentConfig.c_str());
     }
     ImGui::End();
 }
@@ -63,6 +65,7 @@ void ui::Macro() {
     ImGui::SetCursorPos(ImVec2(10, 10));
     ImGui::BeginChild("##child1", ImVec2(175, 190), false, ImGuiWindowFlags_NoScrollbar);
     {
+        ImGui::Checkbox("enable", &mouse::active);
         ImGui::SliderFloat("x", &mouse::x, -10, 10);
         ImGui::SliderFloat("y", &mouse::y, -10, 10);
         ImGui::SliderFloat("time", &mouse::time, 0, 10);
@@ -78,6 +81,7 @@ void ui::Macro() {
 
 void ui::Config() {
     ImGui::SetCursorPos(ImVec2(10, 10));
+    ImVec2 buttonSize(52, 30);
     ImGui::BeginChild("##child1", ImVec2(360, 200), false, ImGuiWindowFlags_NoScrollbar);
     {
         ImGui::InputText("##configName", config::name, 20);
@@ -90,8 +94,6 @@ void ui::Config() {
         }
 
         ImGui::ListBox("##configs", &selectedIndex, configNames.data(), configNames.size());
-
-        ImVec2 buttonSize(52, 30);
 
         if (ImGui::Button("save", buttonSize) && config::isValidIndex(selectedIndex)) {
             config::Save(configNames[selectedIndex]);
