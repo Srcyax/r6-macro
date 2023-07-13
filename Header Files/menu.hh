@@ -16,7 +16,7 @@ namespace ui {
 }
 
 namespace ui {
-	const char window_title[255] = "cya macro 0.0.1f - ";
+	const char window_title[255] = "cya macro 0.0.1f";
 	
 	inline ImVec2 screen_res{ 000, 000 };
 	inline ImVec2 window_pos{ 0, 0 };

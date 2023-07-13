@@ -1457,10 +1457,12 @@ const char* ImStrSkipBlank(const char* str)
 #define STB_SPRINTF_IMPLEMENTATION
 #include "stb_sprintf.h"
 #endif
+#include <array>
 
 #if defined(_MSC_VER) && !defined(vsnprintf)
 #define vsnprintf _vsnprintf
 #endif
+#include <string_view>
 
 int ImFormatString(char* buf, size_t buf_size, const char* fmt, ...)
 {
@@ -5278,6 +5280,297 @@ bool ImGui::BeginChild(const char* str_id, const ImVec2& size_arg, bool border, 
 {
     ImGuiWindow* window = GetCurrentWindow();
     return BeginChildEx(str_id, window->GetID(str_id), size_arg, border, extra_flags);
+}
+
+const char* const KeyNames[] = {
+    "Unknown",
+    "MOUSE1",
+    "MOUSE2",
+    "CANCEL",
+    "MBUTTON",
+    "XBUTTON1",
+    "XBUTTON2",
+    "Unknown",
+    "BACK",
+    "TAB",
+    "Unknown",
+    "Unknown",
+    "CLEAR",
+    "RETURN",
+    "Unknown",
+    "Unknown",
+    "SHIFT",
+    "CONTROL",
+    "MENU",
+    "PAUSE",
+    "CAPITAL",
+    "KANA",
+    "Unknown",
+    "JUNJA",
+    "FINAL",
+    "KANJI",
+    "Unknown",
+    "ESCAPE",
+    "CONVERT",
+    "NONCONVERT",
+    "ACCEPT",
+    "MODECHANGE",
+    "SPACE",
+    "PRIOR",
+    "NEXT",
+    "END",
+    "HOME",
+    "LEFT",
+    "UP",
+    "RIGHT",
+    "DOWN",
+    "SELECT",
+    "PRINT",
+    "EXECUTE",
+    "SNAPSHOT",
+    "INSERT",
+    "DELETE",
+    "HELP",
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "Unknown",
+    "Unknown",
+    "Unknown",
+    "Unknown",
+    "Unknown",
+    "Unknown",
+    "Unknown",
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J",
+    "K",
+    "L",
+    "M",
+    "N",
+    "O",
+    "P",
+    "Q",
+    "R",
+    "S",
+    "T",
+    "U",
+    "V",
+    "W",
+    "X",
+    "Y",
+    "Z",
+    "LWIN",
+    "RWIN",
+    "APPS",
+    "Unknown",
+    "SLEEP",
+    "NUMPAD0",
+    "NUMPAD1",
+    "NUMPAD2",
+    "NUMPAD3",
+    "NUMPAD4",
+    "NUMPAD5",
+    "NUMPAD6",
+    "NUMPAD7",
+    "NUMPAD8",
+    "NUMPAD9",
+    "MULTIPLY",
+    "ADD",
+    "SEPARATOR",
+    "SUBTRACT",
+    "DECIMAL",
+    "DIVIDE",
+    "F1",
+    "F2",
+    "F3",
+    "F4",
+    "F5",
+    "F6",
+    "F7",
+    "F8",
+    "F9",
+    "F10",
+    "F11",
+    "F12",
+    "F13",
+    "F14",
+    "F15",
+    "F16",
+    "F17",
+    "F18",
+    "F19",
+    "F20",
+    "F21",
+    "F22",
+    "F23",
+    "F24",
+    "Unknown",
+    "Unknown",
+    "Unknown",
+    "Unknown",
+    "Unknown",
+    "Unknown",
+    "Unknown",
+    "Unknown",
+    "NUMLOCK",
+    "SCROLL",
+    "OEM_NEC_EQUAL",
+    "OEM_FJ_MASSHOU",
+    "OEM_FJ_TOUROKU",
+    "OEM_FJ_LOYA",
+    "OEM_FJ_ROYA",
+    "Unknown",
+    "Unknown",
+    "Unknown",
+    "Unknown",
+    "Unknown",
+    "Unknown",
+    "Unknown",
+    "Unknown",
+    "Unknown",
+    "LSHIFT",
+    "RSHIFT",
+    "LCONTROL",
+    "RCONTROL",
+    "LMENU",
+    "RMENU"
+};
+
+
+bool ImGui::Hotkey(const char* label, int* k, const ImVec2& size_arg)
+{
+    ImGuiWindow* window = ImGui::GetCurrentWindow();
+    if (window->SkipItems)
+        return false;
+
+    ImGuiContext& g = *GImGui;
+    ImGuiIO& io = g.IO;
+    const ImGuiStyle& style = g.Style;
+
+    const ImGuiID id = window->GetID(label);
+    const ImVec2 label_size = ImGui::CalcTextSize(label, NULL, true);
+    ImVec2 size = ImGui::CalcItemSize(size_arg, ImGui::CalcItemWidth(), label_size.y + style.FramePadding.y * 2.0f);
+    const ImRect frame_bb(window->DC.CursorPos + ImVec2(label_size.x + style.ItemInnerSpacing.x, 0.0f), window->DC.CursorPos + size);
+    const ImRect total_bb(window->DC.CursorPos, frame_bb.Max);
+
+    ImGui::ItemSize(total_bb, style.FramePadding.y);
+    if (!ImGui::ItemAdd(total_bb, id))
+        return false;
+
+    /*const bool focus_requested = ImGui::FocusableItemRegister(window, id);
+    const bool focus_requested_by_code = focus_requested && (window->FocusOrder == window->LastFrameJustFocused);
+    const bool focus_requested_by_tab = focus_requested && !focus_requested_by_code;*/
+
+    const bool hovered = ImGui::ItemHoverable(frame_bb, id);
+
+    if (hovered) {
+        ImGui::SetHoveredID(id);
+        g.MouseCursor = ImGuiMouseCursor_TextInput;
+    }
+
+    const bool user_clicked = hovered && io.MouseClicked[0];
+
+    if (user_clicked) {//
+        if (g.ActiveId != id) {
+            // Start edition
+            memset(io.MouseDown, 0, sizeof(io.MouseDown));
+            memset(io.KeysDown, 0, sizeof(io.KeysDown));
+            *k = 0;
+        }
+        ImGui::SetActiveID(id, window);
+        ImGui::FocusWindow(window);
+    }
+    else if (io.MouseClicked[0]) {
+        // Release focus when we click outside
+        if (g.ActiveId == id)
+            ImGui::ClearActiveID();
+    }
+
+    bool value_changed = false;
+    int key = *k;
+
+    if (g.ActiveId == id) {
+        for (auto i = 0; i < 5; i++) {
+            if (io.MouseDown[i]) {
+                switch (i) {
+                case 0:
+                    key = VK_LBUTTON;
+                    break;
+                case 1:
+                    key = VK_RBUTTON;
+                    break;
+                case 2:
+                    key = VK_MBUTTON;
+                    break;
+                case 3:
+                    key = VK_XBUTTON1;
+                    break;
+                case 4:
+                    key = VK_XBUTTON2;
+                    break;
+                }
+                value_changed = true;
+                ImGui::ClearActiveID();
+            }
+        }
+        if (!value_changed) {
+            for (auto i = VK_BACK; i <= VK_RMENU; i++) {
+                if (io.KeysDown[i]) {
+                    key = i;
+                    value_changed = true;
+                    ImGui::ClearActiveID();
+                }
+            }
+        }
+
+        if (IsKeyPressedMap(ImGuiKey_Escape)) {
+            *k = 0;
+            ImGui::ClearActiveID();
+        }
+        else {
+            *k = key;
+        }
+    }
+
+    // Render
+    // Select which buffer we are going to display. When ImGuiInputTextFlags_NoLiveEdit is Set 'buf' might still be the old value. We Set buf to NULL to prevent accidental usage from now on.
+
+    char buf_display[64] = "None";
+
+    ImGui::RenderFrame(frame_bb.Min, frame_bb.Max, ImGui::GetColorU32(ImVec4(0.20f, 0.25f, 0.30f, 1.0f)), true, style.FrameRounding);
+
+    if (*k != 0 && g.ActiveId != id) {
+        strcpy_s(buf_display, KeyNames[*k]);
+    }
+    else if (g.ActiveId == id) {
+        strcpy_s(buf_display, "<Press a key>");
+    }
+
+    const ImRect clip_rect(frame_bb.Min.x, frame_bb.Min.y, frame_bb.Min.x + size.x, frame_bb.Min.y + size.y); // Not using frame_bb.Max because we have adjusted size
+    ImVec2 render_pos = frame_bb.Min + style.FramePadding;
+    ImGui::RenderTextClipped(frame_bb.Min + style.FramePadding, frame_bb.Max - style.FramePadding, buf_display, NULL, NULL, style.ButtonTextAlign, &clip_rect);
+    //RenderTextClipped(frame_bb.Min + style.FramePadding, frame_bb.Max - style.FramePadding, buf_display, NULL, NULL, GetColorU32(ImGuiCol_Text), style.ButtonTextAlign, &clip_rect);
+    //draw_window->DrawList->AddText(g.Font, g.FontSize, render_pos, GetColorU32(ImGuiCol_Text), buf_display, NULL, 0.0f, &clip_rect);
+
+    if (label_size.x > 0)
+        ImGui::RenderText(ImVec2(total_bb.Min.x, frame_bb.Min.y + style.FramePadding.y), label);
+
+    return value_changed;
 }
 
 bool ImGui::BeginChild(ImGuiID id, const ImVec2& size_arg, bool border, ImGuiWindowFlags extra_flags)

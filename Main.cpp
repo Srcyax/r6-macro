@@ -106,7 +106,7 @@ int APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
             continue;
         }
 
-        if ((GetAsyncKeyState(VK_INSERT) & 0x8000) != 0) {
+        if ((GetAsyncKeyState(mouse::key) & 0x8000) != 0) {
             Sleep(100);      
             mouse::active = !mouse::active;
             Beep(mouse::active ? 200 : 300, 200);               

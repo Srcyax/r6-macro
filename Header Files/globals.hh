@@ -28,6 +28,7 @@ namespace mouse
 	void click(int holdTime);
 
 	inline bool active = true;
+	inline int key = 0;
 	inline float x;
 	inline float y;
 	inline float time;
