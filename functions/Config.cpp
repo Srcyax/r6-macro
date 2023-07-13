@@ -5,6 +5,8 @@ void config::Create() {
     data["x"] = 0.f;
     data["y"] = 0.f;
     data["time"] = 0.f;
+    data["active"] = false;
+    data["key"] = 0;
 
     std::fstream file(config::directory + config::name + ".json", std::ios::out);
 
@@ -25,6 +27,8 @@ void config::Load(std::string name) {
     mouse::x = data["x"];
     mouse::y = data["y"];
     mouse::time = data["time"];
+    mouse::active = data["active"];
+    mouse::key = data["key"];
 }
 
 void config::Save(std::string name) {
@@ -32,6 +36,8 @@ void config::Save(std::string name) {
     data["x"] = mouse::x;
     data["y"] = mouse::y;
     data["time"] = mouse::time;
+    data["active"] = mouse::active;
+    data["key"] = mouse::key;
 
     std::ofstream file(config::directory + name, std::ios::out);
     file << data.dump();
