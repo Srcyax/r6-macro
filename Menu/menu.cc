@@ -7,7 +7,7 @@
 
 static void HelpMarker(const char* desc);
 void CenterText(const char* text);
-std::string currentConfig;
+
 
 std::vector<std::string> getExistingConfigs(const std::string& directory) {
     std::vector<std::string> configs;
@@ -33,11 +33,14 @@ void ui::renderMenu() {
     {
         ImGui::BeginChild("##buttons" , ImVec2(100, 235));
         {
+            ImGui::SetCursorPos(ImVec2(20, 35));
+            if (ImGui::Button(" \n\n " ICON_FA_LIST " \n ##1", ImVec2(60, 60))) 
+                globals.tab = 0;
+
             ImGui::SetCursorPosX(20);
-            ImGui::SetCursorPosY(35);
-            if (ImGui::Button(" \n\n " ICON_FA_LIST " \n ##1", ImVec2(60, 60))) globals.tab = 0;
-            ImGui::SetCursorPosX(20);
-            if (ImGui::Button(" \n\n  " ICON_FA_ADDRESS_CARD " \n ##2", ImVec2(60, 60))) globals.tab = 1;
+
+            if (ImGui::Button(" \n\n  " ICON_FA_ADDRESS_CARD " \n ##2", ImVec2(60, 60))) 
+                globals.tab = 1;
         }
         ImGui::EndChild();
         ImGui::SameLine();
@@ -47,21 +50,20 @@ void ui::renderMenu() {
             switch (globals.tab)
             {
             case 0:
-                ui::Macro();
+                ui::macro();
                 break;
             case 1:
-                ui::Config();
+                ui::config();
                 break;
             }
-            
         }
         ImGui::EndChild();
-        ImGui::Text(currentConfig.c_str());
+        ImGui::Text(config::current.c_str());
     }
     ImGui::End();
 }
 
-void ui::Macro() {
+void ui::macro() {
     ImGui::SetCursorPos(ImVec2(10, 10));
     ImGui::BeginChild("##child1", ImVec2(175, 190), false, ImGuiWindowFlags_NoScrollbar);
     {   
@@ -80,20 +82,20 @@ void ui::Macro() {
     ImGui::EndChild();
 }
 
-void ui::Config() {
+void ui::config() {
     ImGui::SetCursorPos(ImVec2(10, 10));
     ImVec2 buttonSize(52, 30);
     ImGui::BeginChild("##child1", ImVec2(360, 200), false, ImGuiWindowFlags_NoScrollbar);
     {
-        ImGui::InputText("##configName", config::name, 20);
         std::vector<std::string> configs = getExistingConfigs("C:\\Configs");
-
         static int selectedIndex = -1;
         std::vector<const char*> configNames;
         for (const auto& config : configs) {
             configNames.push_back(config.c_str());
         }
 
+        ImGui::InputText("##configName", config::name, sizeof(config::name));
+  
         ImGui::ListBox("##configs", &selectedIndex, configNames.data(), configNames.size());
 
         if (ImGui::Button("save", buttonSize) && config::isValidIndex(selectedIndex)) {
@@ -102,7 +104,7 @@ void ui::Config() {
         ImGui::SameLine();
         if (ImGui::Button("load", buttonSize) && config::isValidIndex(selectedIndex)) {
             config::Load(configNames[selectedIndex]);
-            currentConfig = configNames[selectedIndex];
+            config::current = configNames[selectedIndex];
         }
         ImGui::SameLine();
         std::size_t configNameLengh = std::strlen(config::name);
@@ -120,7 +122,7 @@ void ui::Config() {
 void ui::init(LPDIRECT3DDEVICE9 device) {
     dev = device;
 
-    ui::RunStyle();
+    ui::runStyle();
 
 	if (window_pos.x == 0) {
     	RECT screen_rect{};
@@ -130,7 +132,7 @@ void ui::init(LPDIRECT3DDEVICE9 device) {
 	}
 }
 
-void ui::RunStyle()
+void ui::runStyle()
 {
     ImGuiStyle& style = ImGui::GetStyle();
 

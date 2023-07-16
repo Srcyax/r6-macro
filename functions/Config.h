@@ -16,4 +16,5 @@ namespace config
 		return index != -1;
 	}
 	static std::string directory = "C:\\Configs\\";
+	inline std::string current = "default.json";
 };

@@ -6,9 +6,9 @@
 namespace ui {
 	void init(LPDIRECT3DDEVICE9);
 	void renderMenu();
-	void RunStyle();
-	void Config();
-	void Macro();
+	void runStyle();
+	void config();
+	void macro();
 }
 
 namespace ui {
