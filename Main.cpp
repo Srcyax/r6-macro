@@ -111,15 +111,16 @@ int APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
             Beep(mouse::active ? 200 : 300, 200);               
         }
 
-        if ((GetAsyncKeyState(VK_DELETE) & 0x8000) != 0)
+        if ((GetAsyncKeyState(VK_DELETE) & 0x8000) != 0 && GetActiveWindowTitle() == "Rainbow Six")
         {
             PostQuitMessage(0);
             return 0;
         }
 
 
-        if (mouse::active && (GetKeyState(VK_LBUTTON) & 0x8000) != 0 && GetActiveWindowTitle() == "Rainbow Six" && (GetAsyncKeyState(VK_XBUTTON1) & 0x8000) == 0)
+        if (mouse::active && (GetKeyState(VK_LBUTTON) & 0x8000) != 0 && GetActiveWindowTitle() == "Rainbow Six" && (GetAsyncKeyState(VK_XBUTTON1) & 0x8000) == 0) {
             mouse::Move(mouse::x, mouse::y, mouse::time);
+        }
 
 
         // Start the Dear ImGui frame

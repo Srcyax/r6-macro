@@ -67,17 +67,16 @@ void ui::macro() {
     ImGui::SetCursorPos(ImVec2(10, 10));
     ImGui::BeginChild("##child1", ImVec2(175, 190), false, ImGuiWindowFlags_NoScrollbar);
     {   
-        ImGui::Checkbox("active", &mouse::active); ImGui::SameLine();
+        ImGui::Checkbox("active", &mouse::active); ImGui::SameLine(); 
         ImGui::Hotkey("##keybind", &mouse::key, ImVec2(80, 20));
         ImGui::SliderFloat("x", &mouse::x, -10, 10);
         ImGui::SliderFloat("y", &mouse::y, -10, 10);
-        ImGui::SliderFloat("time", &mouse::time, 0, 10);
     }
     ImGui::EndChild();
     ImGui::SameLine();
     ImGui::BeginChild("##child2", ImVec2(175, 190), false, ImGuiWindowFlags_NoScrollbar);
     {
-        ImGui::Text("empty...");
+        ImGui::SliderFloat("time", &mouse::time, -10, 10);
     }
     ImGui::EndChild();
 }

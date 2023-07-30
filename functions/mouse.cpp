@@ -4,8 +4,9 @@
 
 void mouse::Move(float x, float y, float s)
 {
-	mouse_event(0x0001, x, y, 0, 0);
-	Sleep(s);
+	mouse_event(0x0001, x * 10, y * 10, 0, 0);
+
+	Sleep(s * 10);
 }
 
 void mouse::click(int holdTime)

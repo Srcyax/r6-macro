@@ -8,9 +8,9 @@
 class c_globals {
 public:
 	bool active = true;
-
 	int tab = 0;
 	int subTab = 0;		
+
 };
 
 class color_settings
@@ -24,7 +24,7 @@ inline color_settings color;
 
 namespace mouse
 {
-	void Move(float x,float y, float s);
+	void Move(float x,float y, float x_multi);
 	void click(int holdTime);
 
 	inline bool active = true;
